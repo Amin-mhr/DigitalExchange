@@ -3,8 +3,13 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 */
 package main
 
-import "DigitalExchange/cmd"
+import (
+	"DigitalExchange/cmd"
+	"log"
+)
 
 func main() {
-	cmd.Execute()
+	if err := cmd.Execute(); err != nil {
+		log.Fatalln(err)
+	}
 }
