@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"DigitalExchange/src/api"
 	"DigitalExchange/src/database"
 	"log"
 	"os"

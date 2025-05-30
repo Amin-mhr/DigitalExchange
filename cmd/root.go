@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"DigitalExchange/cmd/app"
+	"DigitalExchange/cmd/database"
 	"DigitalExchange/src/config"
 	"github.com/spf13/cobra"
 	"log"
@@ -27,7 +28,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.AddCommand(
 		app.AppCmd,
-		//database.DatabaseCmd,
+		database.DatabaseCmd,
 		//cron.CronCmd,
 	)
 }

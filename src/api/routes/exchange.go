@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterMatchRoutes(router *gin.RouterGroup) {
+func RegisterExchangeRoutes(router *gin.RouterGroup) {
 	serviceContainer := wire.InitializeServiceContainer()
 
 	matchRoutes := router.Group("exchange")

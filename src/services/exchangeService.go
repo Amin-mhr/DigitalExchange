@@ -11,7 +11,7 @@ type IExchangeService interface {
 	DeleteOrder(OrderID uint) (*models.OrderModel, error)
 	GetOrderById(OrderID uint) (*models.OrderModel, error)
 	GetBalance(exchangeID uint) ([]*models.BalanceModel, error)
-	GetOrderBookBalance(exchangeID uint) ([]*models.OrderBook, error)
+	GetOrderBook(exchangeID uint) ([]*models.OrderBook, error)
 }
 
 type ExchangeService struct {
@@ -62,7 +62,7 @@ func (service *ExchangeService) GetBalance(exchangeID uint) ([]*models.BalanceMo
 	return balances, nil
 }
 
-func (service *ExchangeService) GetOrderBookBalance(exchangeID uint) ([]*models.OrderBook, error) {
+func (service *ExchangeService) GetOrderBook(exchangeID uint) ([]*models.OrderBook, error) {
 	orderBooks, err := service.IExchangeRepository.GetOrderBookListExchange(exchangeID)
 	if err != nil {
 		return nil, err

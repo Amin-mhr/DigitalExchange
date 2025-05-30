@@ -1,0 +1,98 @@
+services:
+
+  # App
+  app:
+    build:
+      context: .
+      dockerfile: build/docker/app/Dockerfile
+    container_name: app.${APP_HOST}
+    restart: unless-stopped
+    tty: true
+    environment:
+      TZ: ${APP_TZ}
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - tyche
+
+  # Nginx
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx.${APP_HOST}
+    restart: unless-stopped
+    ports:
+      - 8221:8221
+    tty: true
+    depends_on:
+      - app
+    environment:
+      SERVER_NAME: ${APP_HOST}
+      SERVER_PORT: 8221
+      USER_PROXY_PASS: http://app.${APP_HOST}:${USER_APP_PORT}
+      ADMIN_PROXY_PASS: http://app.${APP_HOST}:${ADMIN_APP_PORT}
+      TZ: ${APP_TZ}
+    volumes:
+      - ./build/docker/nginx:/etc/nginx/templates:ro
+    networks:
+      - tyche
+
+  # Postgres
+  postgres:
+    image: postgres:alpine
+    container_name: postgres.${APP_HOST}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      TZ: ${APP_TZ}
+    ports:
+      - ${DB_PORT:-5432}:5432
+    volumes:
+      - ./build/docker/postgresql/postgres.conf:/etc/postgresql.conf:ro
+      - ./build/docker/postgresql/pg_hba.conf:/etc/pg_hba.conf:ro
+      - ./build/docker/postgresql/postgres-init.sh:/docker-entrypoint-initdb.d/postgres-init.sh:ro
+      - postgres-data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "config_file=/etc/postgresql.conf", "-c", "hba_file=/etc/pg_hba.conf"]
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tyche
+
+  # Redis
+  redis:
+    image: redis:alpine
+    container_name: redis.${APP_HOST}
+    restart: unless-stopped
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    volumes:
+      - ./build/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis-data:/data
+    tty: true
+    environment:
+      TZ: ${APP_TZ}
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tyche
+
+# Persistent Volumes
+volumes:
+  postgres-data:
+  redis-data:
+
+# Networks
+networks:
+  tyche:
+    driver: bridge

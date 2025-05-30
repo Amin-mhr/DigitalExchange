@@ -2,12 +2,12 @@ package api
 
 import (
 	"DigitalExchange/src/api/http/middlewares"
+	"DigitalExchange/src/api/routes"
 	"DigitalExchange/src/config"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/errgroup"
 	"log"
-	"tyche/src/api/routes"
 )
 
 var (
@@ -62,7 +62,7 @@ func initUserServer() error {
 
 	// Run App.
 	if err := router.Run(
-		fmt.Sprintf(":%s", configs.Get("USER_APP_PORT")),
+		fmt.Sprintf(":%s", configs.Get("APP_PORT")),
 	); err != nil {
 		return err
 	}
