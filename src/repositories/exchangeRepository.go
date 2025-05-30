@@ -31,7 +31,6 @@ func (repository *ExchangeRepository) CreateOrder(Order *models.OrderModel) (*mo
 func (repository *ExchangeRepository) GetOrderById(OrderID uint) (*models.OrderModel, error) {
 	var Order models.OrderModel
 	result := repository.IDatabaseHandler.GetClient().
-		Preload("Exchange").
 		First(&Order, "id = ?", OrderID)
 	if result.Error != nil && !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, fmt.Errorf("Order get by id failed: %s", result.Error.Error())

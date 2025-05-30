@@ -1,7 +1,7 @@
 package exchangeRequests
 
 type CreateOrderRequest struct {
-	ExchangeID    uint    `json:"exchange_name"`
+	ExchangeID    uint    `json:"exchange_id"`
 	ClientOrderID string  `json:"client_order_id"`
 	Symbol        string  `json:"symbol"`
 	Side          string  `json:"side"`

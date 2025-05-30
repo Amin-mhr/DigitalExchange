@@ -29,7 +29,6 @@ func init() {
 	rootCmd.AddCommand(
 		app.AppCmd,
 		database.DatabaseCmd,
-		//cron.CronCmd,
 	)
 }
 
