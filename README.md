@@ -61,7 +61,7 @@ The project structure includes API controllers, models, database migrations, and
 1. Ensure the `.env` file is configured with the correct environment variables (see [Configuration](#configuration)).
 2. Run the application using the Cobra CLI:
    ```bash
-   go run main.go server
+   go run main.go app bootstrap
    ```
    This starts the API server on the port specified in `.env` (default: 8443).
 
@@ -98,7 +98,7 @@ DB_CONNECTION_MAX_LIFETIME=3600
 ### Running Locally
 1. Start the development environment:
    ```bash
-   go run main.go server
+   go run main.go app bootstrap
    ```
 2. Test the API using tools like Postman or `curl`.
 
@@ -112,19 +112,30 @@ Ensure the `wire.go` file is updated in the appropriate package (e.g., `wire_gen
 ### Database Migrations
 Run migrations to set up the database schema:
 ```bash
-go run main.go migrate
+go run main.go database migration up
 ```
+and run below command for rollback migrations:
+```bash
+go run main.go database migration down
+```
+### Database Seeder
+Run Seeder files to set up the data in schema:
+```bash
+go run main.go database seed run
+```
+this will fill database tables with test data.
+
 
 ## Running with Docker
 1. Build and start the services:
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 2. Access the API at `http://localhost:8443` and the database at `localhost:5431`.
 
 ### Stopping the Services
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## API Documentation
@@ -145,6 +156,10 @@ The API includes endpoints for order management. Example request (using Postman)
   ```
 - Refer to the `api/controllers` package for more endpoints.
 
+![Screenshot from 2025-05-30 21-55-38.png](pic%2FScreenshot%20from%202025-05-30%2021-55-38.png)
+![Screenshot from 2025-05-30 22-06-30.png](pic%2FScreenshot%20from%202025-05-30%2022-06-30.png)
+![Screenshot from 2025-05-30 22-10-08.png](pic%2FScreenshot%20from%202025-05-30%2022-10-08.png)
+
 ## Contributing
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature-branch`.
@@ -155,11 +170,3 @@ The API includes endpoints for order management. Example request (using Postman)
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 ```
-
-### نکات
-- این فایل رو با نام `README.md` توی ریشه پروژه (کنار `docker-compose.yml`) ذخیره کن.
-- لینک GitHub (`https://github.com/yourusername/DigitalExchange.git`) رو با آدرس واقعی مخزن‌ات جایگزین کن.
-- اگه `.env.example` داری، مطمئن شو که توی پروژه هست و توی `README` بهش اشاره شده.
-- می‌تونی بخش‌های اضافی مثل "Testing" یا "Troubleshooting" رو اضافه کنی اگه نیاز داری.
-
-اگه می‌خوای تغییر خاصی بدی (مثلاً اضافه کردن دستورات بیشتر یا تغییر سبک)، بگو تا ویرایش کنم! 😊
