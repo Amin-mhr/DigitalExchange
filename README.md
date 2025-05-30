@@ -40,7 +40,7 @@ The project structure includes API controllers, models, database migrations, and
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/DigitalExchange.git
+   git clone https://github.com/Amin-mhr/DigitalExchange.git
    cd DigitalExchange
    ```
 2. Install dependencies:
@@ -67,8 +67,8 @@ The project structure includes API controllers, models, database migrations, and
 
 ### Available CLI Commands
 Use `go run main.go --help` to see available commands. Example:
-- `go run main.go server`: Starts the API server.
-- `go run main.go migrate`: Runs database migrations.
+- `go run main.go app bootstrap`: Starts the API server.
+- `go run main.go database migrate up`: Runs database migrations.
 
 ## Configuration
 Copy the `.env.example` file to `.env` and update the following variables:
