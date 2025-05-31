@@ -1,11 +1,13 @@
 package drivers
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
 	gormPsql "gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Postgres struct {
@@ -54,7 +56,9 @@ func (postgres *Postgres) Close() (err error) {
 
 // GetClient returns an instance of database.
 func (postgres *Postgres) GetClient() *gorm.DB {
-	return client
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return client.WithContext(ctx)
 }
 
 // GetDB returns an instance of database.
